@@ -174,13 +174,16 @@ export default function Home({ setActive }) {
 
           {/* Action buttons */}
           <div className="grid grid-cols-3 gap-2">
-            <button
+            <a
+              href={decisionService.paymentUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => handleDecision(decisionService.id, 'continued')}
-              className="py-2 rounded-xl text-xs font-semibold transition-all active:scale-95"
+              className="py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 text-center"
               style={{ backgroundColor: 'var(--accent)', color: 'white' }}
             >
               {tr('btnContinue')}
-            </button>
+            </a>
             <button
               onClick={() => handleDecision(decisionService.id, 'postponed')}
               className="py-2 rounded-xl text-xs font-semibold border transition-all active:scale-95"
@@ -188,13 +191,16 @@ export default function Home({ setActive }) {
             >
               {tr('btnPostpone')}
             </button>
-            <button
+            <a
+              href={decisionService.cancelUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => handleDecision(decisionService.id, 'frozen')}
-              className="py-2 rounded-xl text-xs font-semibold transition-all active:scale-95"
-              style={{ backgroundColor: 'rgba(59,130,246,0.12)', color: '#60a5fa' }}
+              className="py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 text-center"
+              style={{ backgroundColor: 'rgba(239,68,68,0.1)', color: '#ef4444' }}
             >
-              {tr('btnFreeze')}
-            </button>
+              {lang === 'ar' ? 'إلغاء' : 'Cancel'}
+            </a>
           </div>
         </div>
       )}

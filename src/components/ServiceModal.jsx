@@ -159,16 +159,42 @@ export default function ServiceModal({ service, onClose }) {
             </div>
           )}
 
+          {/* Action buttons */}
+          <div className="grid grid-cols-2 gap-2">
+            {service.paymentUrl && (
+              <a
+                href={service.paymentUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
+                style={{ backgroundColor: service.color, color: 'white' }}
+              >
+                {lang === 'ar' ? 'ادفع الآن' : 'Pay Now'}
+              </a>
+            )}
+            {service.cancelUrl && (
+              <a
+                href={service.cancelUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
+                style={{ backgroundColor: 'rgba(239,68,68,0.1)', color: '#ef4444' }}
+              >
+                {lang === 'ar' ? 'إلغاء الاشتراك' : 'Cancel Plan'}
+              </a>
+            )}
+          </div>
+
           {/* Website link */}
           {service.website && (
             <a
               href={service.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
-              style={{ backgroundColor: service.color + '18', color: service.color }}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm transition-all active:scale-95"
+              style={{ backgroundColor: 'var(--bg)', color: 'var(--text-secondary)' }}
             >
-              <ExternalLink size={14} />
+              <ExternalLink size={13} />
               {lang === 'ar' ? 'زيارة الموقع' : 'Visit Website'}
             </a>
           )}
