@@ -3,6 +3,7 @@ import { TrendingUp, AlertCircle, Clock, XCircle } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { useTranslation } from '../translations'
 import { useLang } from '../contexts/LanguageContext'
+import ServiceModal from './ServiceModal'
 
 function daysUntil(dateStr) {
   const today = new Date(); today.setHours(0,0,0,0)
@@ -36,6 +37,7 @@ export default function Payments() {
   const { lang } = useLang()
   const tr = useTranslation(lang)
   const [filter, setFilter] = useState(30)
+  const [selected, setSelected] = useState(null)
 
   const filtered = state.services
     .filter(s => daysUntil(s.nextDate) <= filter && daysUntil(s.nextDate) >= 0)
@@ -45,6 +47,7 @@ export default function Payments() {
 
   return (
     <div className="tab-content space-y-4">
+      <ServiceModal service={selected} onClose={() => setSelected(null)} />
       {/* Filter toggle */}
       <div className="flex items-center gap-2">
         <div
@@ -84,11 +87,12 @@ export default function Payments() {
             return (
               <div
                 key={s.id}
-                className="rounded-xl p-3 border transition-all"
+                className="rounded-xl p-3 border transition-all cursor-pointer hover:opacity-90 active:scale-[0.99]"
                 style={{
                   backgroundColor: 'var(--bg-card)',
                   borderColor: isUrgent ? 'rgba(239,68,68,0.3)' : 'transparent',
                 }}
+                onClick={() => setSelected(s)}
               >
                 <div className="flex items-center gap-3">
                   <div

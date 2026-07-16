@@ -1,7 +1,9 @@
 import { CheckCircle, Clock, Snowflake, AlertTriangle, ArrowLeft, ArrowRight, TrendingUp, RotateCcw } from 'lucide-react'
+import { useState } from 'react'
 import { useApp } from '../contexts/AppContext'
 import { useTranslation } from '../translations'
 import { useLang } from '../contexts/LanguageContext'
+import ServiceModal from './ServiceModal'
 
 function formatDate(dateStr, lang) {
   const date = new Date(dateStr)
@@ -54,6 +56,7 @@ export default function Home({ setActive }) {
   const { state, dispatch } = useApp()
   const { lang, dir } = useLang()
   const tr = useTranslation(lang)
+  const [selected, setSelected] = useState(null)
 
   const { services, card } = state
   const needsDecision = services.find(s => s.status === 'needs_decision')
@@ -73,6 +76,7 @@ export default function Home({ setActive }) {
 
   return (
     <div className="tab-content space-y-4">
+      <ServiceModal service={selected} onClose={() => setSelected(null)} />
       {/* Monthly card */}
       <div
         className="rounded-2xl p-4"
@@ -243,8 +247,9 @@ export default function Home({ setActive }) {
           {upcoming.map(s => (
             <div
               key={s.id}
-              className="rounded-xl p-3 flex items-center gap-3"
+              className="rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:opacity-90 active:scale-[0.99] transition-all"
               style={{ backgroundColor: 'var(--bg-card)' }}
+              onClick={() => setSelected(s)}
             >
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"

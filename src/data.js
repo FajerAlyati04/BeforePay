@@ -6,6 +6,9 @@ export const services = [
     amount: 56,
     currency: 'SAR',
     nextDate: getRelativeDate(3),
+    billingCycle: { ar: 'شهري', en: 'Monthly' },
+    startDate: '2023-04-01',
+    website: 'https://netflix.com',
     status: 'active',
     riskLevel: 'low',
     priceChanged: false,
@@ -13,6 +16,14 @@ export const services = [
     logo: 'N',
     color: '#E50914',
     decision: null,
+    description: {
+      ar: 'خدمة بث الأفلام والمسلسلات. الخطة الحالية تشمل 4 شاشات بجودة 4K.',
+      en: 'Streaming service for movies and series. Current plan includes 4 screens in 4K quality.',
+    },
+    features: {
+      ar: ['4 شاشات في وقت واحد', 'جودة 4K + HDR', 'تحميل للمشاهدة بدون إنترنت'],
+      en: ['4 simultaneous screens', '4K + HDR quality', 'Downloads for offline viewing'],
+    },
   },
   {
     id: 2,
@@ -21,6 +32,9 @@ export const services = [
     amount: 32,
     currency: 'SAR',
     nextDate: getRelativeDate(7),
+    billingCycle: { ar: 'شهري', en: 'Monthly' },
+    startDate: '2023-08-15',
+    website: 'https://spotify.com',
     status: 'active',
     riskLevel: 'low',
     priceChanged: false,
@@ -28,6 +42,14 @@ export const services = [
     logo: 'S',
     color: '#1DB954',
     decision: null,
+    description: {
+      ar: 'خدمة الموسيقى العائلية تشمل حتى 6 حسابات مستقلة بدون إعلانات.',
+      en: 'Family music plan with up to 6 independent accounts and no ads.',
+    },
+    features: {
+      ar: ['6 حسابات مستقلة', 'بدون إعلانات', 'تحميل غير محدود'],
+      en: ['6 independent accounts', 'No ads', 'Unlimited downloads'],
+    },
   },
   {
     id: 3,
@@ -37,6 +59,9 @@ export const services = [
     oldAmount: 75,
     currency: 'SAR',
     nextDate: getRelativeDate(1),
+    billingCycle: { ar: 'شهري', en: 'Monthly' },
+    startDate: '2024-01-10',
+    website: 'https://chat.openai.com',
     status: 'needs_decision',
     riskLevel: 'high',
     priceChanged: true,
@@ -44,6 +69,14 @@ export const services = [
     logo: 'G',
     color: '#10A37F',
     decision: null,
+    description: {
+      ar: 'الوصول لنماذج GPT-4 المتقدمة. ارتفع السعر من 75 إلى 129 ريال هذا الشهر.',
+      en: 'Access to advanced GPT-4 models. Price jumped from SAR 75 to SAR 129 this month.',
+    },
+    features: {
+      ar: ['وصول لـ GPT-4o', 'توليد صور بـ DALL·E', 'أولوية في الاستجابة'],
+      en: ['Access to GPT-4o', 'Image generation with DALL·E', 'Priority response speed'],
+    },
     reasons: {
       ar: [
         'ارتفع السعر بنسبة 72% مقارنة بالشهر الماضي',
@@ -64,6 +97,9 @@ export const services = [
     amount: 249,
     currency: 'SAR',
     nextDate: getRelativeDate(14),
+    billingCycle: { ar: 'شهري', en: 'Monthly' },
+    startDate: '2024-03-01',
+    website: 'https://adobe.com',
     status: 'trial_ending',
     riskLevel: 'medium',
     priceChanged: false,
@@ -72,6 +108,14 @@ export const services = [
     color: '#FF0000',
     decision: null,
     trialEnding: true,
+    description: {
+      ar: 'باقة أدوبي الكاملة تشمل Photoshop وIllustrator وغيرها. الفترة التجريبية تنتهي قريباً.',
+      en: 'Full Adobe suite including Photoshop, Illustrator and more. Trial period ending soon.',
+    },
+    features: {
+      ar: ['Photoshop + Illustrator', 'Premiere Pro للفيديو', '100GB تخزين سحابي'],
+      en: ['Photoshop + Illustrator', 'Premiere Pro for video', '100GB cloud storage'],
+    },
   },
   {
     id: 5,
@@ -80,6 +124,9 @@ export const services = [
     amount: 42,
     currency: 'SAR',
     nextDate: getRelativeDate(21),
+    billingCycle: { ar: 'شهري', en: 'Monthly' },
+    startDate: '2023-11-20',
+    website: 'https://canva.com',
     status: 'unused',
     riskLevel: 'medium',
     priceChanged: false,
@@ -87,6 +134,14 @@ export const services = [
     logo: 'C',
     color: '#00C4CC',
     decision: null,
+    description: {
+      ar: 'أداة تصميم سهلة الاستخدام. لم تُستخدم منذ 45 يوماً — قد تحتاج لمراجعة.',
+      en: 'Easy-to-use design tool. Not used for 45 days — may need review.',
+    },
+    features: {
+      ar: ['قوالب احترافية', 'إزالة خلفية الصور', 'تصدير بدون علامة مائية'],
+      en: ['Professional templates', 'Background removal', 'Export without watermark'],
+    },
   },
 ]
 
