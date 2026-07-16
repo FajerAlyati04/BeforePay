@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FFFFFF;
+  --bg-card: #EEF2F7;
+  --text-primary: #10253F;
+  --text-secondary: #5B6B7C;
+  --accent: #C1552E;
+  --navy: #10253F;
+  --border: #D1D9E3;
+  --sidebar-bg: #10253F;
+}
+
+.dark {
+  --bg: #0B1626;
+  --bg-card: #16283F;
+  --text-primary: #F2F5F8;
+  --text-secondary: #8FA3BC;
+  --accent: #E0714A;
+  --navy: #16283F;
+  --border: #223350;
+  --sidebar-bg: #0d1e33;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.bg-app { background-color: var(--bg); }
+.bg-card { background-color: var(--bg-card); }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-accent { color: var(--accent); }
+.border-app { border-color: var(--border); }
+.bg-sidebar { background-color: var(--sidebar-bg); }
+
+.card-transition {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+}
+
+.bank-card-gradient {
+  background: linear-gradient(135deg, #10253F 0%, #1e3d5c 50%, #0d1e33 100%);
+}
+
+.tab-content {
+  animation: fadeIn 150ms ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
