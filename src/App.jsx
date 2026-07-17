@@ -9,10 +9,21 @@ import Payments from './components/Payments'
 import Card from './components/Card'
 import BankDashboard from './components/BankDashboard'
 import History from './components/History'
+import ConsentScreen from './components/ConsentScreen'
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState('home')
+  const [consented, setConsented] = useState(() => !!localStorage.getItem('bp_consent'))
   const { lang, dir } = useLang()
+
+  function handleAccept() {
+    localStorage.setItem('bp_consent', '1')
+    setConsented(true)
+  }
+
+  if (!consented) {
+    return <ConsentScreen onAccept={handleAccept} lang={lang} />
+  }
 
   const fontClass = lang === 'ar' ? 'font-arabic' : 'font-latin'
 
