@@ -6,14 +6,7 @@ const t = {
   navHome: { ar: 'الرئيسية', en: 'Home' },
   navPayments: { ar: 'المدفوعات', en: 'Payments' },
   navCard: { ar: 'البطاقة', en: 'Card' },
-  navBank: { ar: 'البنك', en: 'Bank' },
-  navHistory: { ar: 'السجل', en: 'History' },
-
-  // History
-  historyTitle: { ar: 'سجل المدفوعات', en: 'Payment History' },
-  totalPaid: { ar: 'إجمالي المدفوع', en: 'total paid' },
-  statusPaid: { ar: 'مدفوع', en: 'Paid' },
-  statusRefunded: { ar: 'مُسترد', en: 'Refunded' },
+  navBank: { ar: 'لوحة البنك', en: 'Bank Panel' },
 
   // Home
   recurringCard: { ar: 'بطاقة المدفوعات المتكررة', en: 'Recurring Payments Card' },
