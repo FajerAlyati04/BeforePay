@@ -24,6 +24,14 @@ function reducer(state, action) {
           s.id === action.id ? { ...s, decision: null } : s
         ),
       }
+    case 'PAY_SERVICE':
+      return {
+        ...state,
+        card: {
+          ...state.card,
+          usedAmount: Math.min(state.card.usedAmount + action.amount, state.card.monthlyLimit),
+        },
+      }
     case 'SET_MONTHLY_LIMIT':
       return { ...state, card: { ...state.card, monthlyLimit: action.limit } }
     case 'TOGGLE_FREEZE':
