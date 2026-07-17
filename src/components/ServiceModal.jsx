@@ -22,12 +22,12 @@ export default function ServiceModal({ service, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-6 sm:overflow-y-auto"
+      style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl overflow-hidden"
+        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl"
         style={{ backgroundColor: 'var(--bg-card)', maxHeight: '90vh', overflowY: 'auto' }}
         onClick={e => e.stopPropagation()}
       >
