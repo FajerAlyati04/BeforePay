@@ -33,13 +33,13 @@ export default function ServiceModal({ service, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-6"
+      className="fixed inset-0 z-[200] flex items-start justify-center px-6 pt-16 pb-6"
       style={{ backgroundColor: 'rgba(0,0,0,0.82)' }}
       onClick={onClose}
     >
       <div
         className="w-full max-w-lg flex flex-col rounded-2xl overflow-hidden"
-        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '86vh' }}
+        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '100%' }}
         onClick={e => e.stopPropagation()}
       >
         {/* ── Header ── */}

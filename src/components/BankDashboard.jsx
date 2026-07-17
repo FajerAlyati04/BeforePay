@@ -306,7 +306,7 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-6"
+      className="fixed inset-0 z-[100] flex items-start justify-center px-6 pt-16 pb-6"
       style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
       onClick={onClose}
     >
