@@ -80,7 +80,7 @@ export default function Home({ setActive }) {
       {/* Monthly card */}
       <div
         className="rounded-2xl p-4"
-        style={{ backgroundColor: 'var(--navy)', background: 'linear-gradient(135deg, #10253F 0%, #1e3d5c 50%, #0d1e33 100%)' }}
+        style={{ backgroundColor: '#0D1B2E' }}
       >
         <p className="text-xs font-medium mb-3" style={{ color: 'rgba(238,242,247,0.6)' }}>
           {tr('recurringCard')}

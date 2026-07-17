@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --bg: #FFFFFF;
-  --bg-card: #EEF2F7;
-  --text-primary: #10253F;
+  --bg: #F4F7FB;
+  --bg-card: #FFFFFF;
+  --text-primary: #0D1B2E;
   --text-secondary: #5B6B7C;
-  --accent: #C1552E;
+  --accent: #C1522A;
   --navy: #10253F;
-  --border: #D1D9E3;
-  --sidebar-bg: #10253F;
+  --border: #D4DCE8;
+  --sidebar-bg: #0D1B2E;
 }
 
 .dark {
-  --bg: #0B1626;
-  --bg-card: #16283F;
-  --text-primary: #F2F5F8;
+  --bg: #090D1A;
+  --bg-card: #111827;
+  --text-primary: #EEF2F7;
   --text-secondary: #8FA3BC;
-  --accent: #E0714A;
-  --navy: #16283F;
-  --border: #223350;
-  --sidebar-bg: #0d1e33;
+  --accent: #D05830;
+  --navy: #111827;
+  --border: #1A2A40;
+  --sidebar-bg: #07101C;
 }
 
 * {
@@ -49,7 +49,11 @@ body {
 }
 
 .bank-card-gradient {
-  background: linear-gradient(135deg, #10253F 0%, #1e3d5c 50%, #0d1e33 100%);
+  background: #0D1B2E;
+}
+
+.dark .bank-card-gradient {
+  background: #0D1B2E;
 }
 
 .tab-content {
