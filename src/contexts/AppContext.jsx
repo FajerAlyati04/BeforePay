@@ -32,6 +32,13 @@ function reducer(state, action) {
           usedAmount: Math.min(state.card.usedAmount + action.amount, state.card.monthlyLimit),
         },
       }
+    case 'BANK_ADVANCE':
+      return {
+        ...state,
+        services: state.services.map(s =>
+          s.id === action.id ? { ...s, decision: 'bank_advanced' } : s
+        ),
+      }
     case 'SET_MONTHLY_LIMIT':
       return { ...state, card: { ...state.card, monthlyLimit: action.limit } }
     case 'TOGGLE_FREEZE':

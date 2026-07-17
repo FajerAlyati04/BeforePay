@@ -1,12 +1,28 @@
 import {
   CheckCircle, Clock, Snowflake, ArrowLeft, ArrowRight,
-  TrendingUp, RotateCcw, CreditCard, Bell,
+  TrendingUp, RotateCcw, CreditCard, Bell, Landmark, ShieldCheck,
 } from 'lucide-react'
 import { useState } from 'react'
 import { useApp } from '../contexts/AppContext'
 import { useTranslation } from '../translations'
 import { useLang } from '../contexts/LanguageContext'
+import { paymentHistory } from '../data'
 import ServiceModal from './ServiceModal'
+
+// ── Analyse past payments to decide if customer qualifies for advance ──
+function analysePaymentRecord() {
+  const all = paymentHistory.flatMap(g => g.payments)
+  const paid   = all.filter(p => p.status === 'paid').length
+  const failed  = all.filter(p => p.status === 'failed').length
+  const total   = all.length
+  return {
+    total,
+    paid,
+    failed,
+    months: paymentHistory.length,
+    qualified: failed === 0 && paid / total >= 0.85,
+  }
+}
 
 function formatDate(dateStr, lang) {
   const date = new Date(dateStr)
@@ -48,13 +64,20 @@ export default function Home({ setActive }) {
   const usedPct = Math.round((card.usedAmount / card.monthlyLimit) * 100)
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight
 
+  const payRecord = analysePaymentRecord()
+
   function handleActionClick(action) {
     if (action === 'continue') {
       setPendingAction('continue')
     } else if (action === 'freeze') {
       setPendingAction('freeze')
     } else {
-      dispatch({ type: 'SET_DECISION', id: needsDecision.id, decision: 'postponed' })
+      // Postpone → check payment record first
+      if (payRecord.qualified) {
+        setPendingAction('advance_offer')
+      } else {
+        dispatch({ type: 'SET_DECISION', id: needsDecision.id, decision: 'postponed' })
+      }
     }
   }
 
@@ -66,6 +89,16 @@ export default function Home({ setActive }) {
 
   function confirmFreeze() {
     dispatch({ type: 'SET_DECISION', id: needsDecision.id, decision: 'frozen' })
+    setPendingAction(null)
+  }
+
+  function acceptAdvance() {
+    dispatch({ type: 'BANK_ADVANCE', id: needsDecision.id })
+    setPendingAction(null)
+  }
+
+  function regularPostpone() {
+    dispatch({ type: 'SET_DECISION', id: needsDecision.id, decision: 'postponed' })
     setPendingAction(null)
   }
 
@@ -251,6 +284,81 @@ export default function Home({ setActive }) {
             </div>
           )}
 
+          {/* Bank Advance Offer */}
+          {pendingAction === 'advance_offer' && (
+            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: 'var(--bg-card)' }}>
+              {/* Header */}
+              <div className="p-4 pb-3" style={{ borderBottom: '1px solid var(--border)' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <ShieldCheck size={16} color="#22c55e" />
+                  <p className="text-sm font-bold" style={{ color: '#22c55e' }}>
+                    {lang === 'ar' ? 'سجل دفع ممتاز' : 'Excellent Payment Record'}
+                  </p>
+                </div>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  {lang === 'ar'
+                    ? `${payRecord.paid} دفعة متتالية بدون أي تأخير`
+                    : `${payRecord.paid} consecutive payments with no delays`}
+                </p>
+              </div>
+
+              {/* Stats row */}
+              <div className="grid grid-cols-3 gap-0" style={{ borderBottom: '1px solid var(--border)' }}>
+                {[
+                  { label: lang === 'ar' ? 'إجمالي الدفعات' : 'Total Paid', value: payRecord.paid, color: '#22c55e' },
+                  { label: lang === 'ar' ? 'الأشهر' : 'Months', value: payRecord.months, color: '#6366f1' },
+                  { label: lang === 'ar' ? 'تأخيرات' : 'Missed', value: payRecord.failed, color: '#ef4444' },
+                ].map((s, i) => (
+                  <div
+                    key={i}
+                    className="py-3 text-center"
+                    style={{ borderRight: i < 2 && lang !== 'ar' ? '1px solid var(--border)' : undefined, borderLeft: i < 2 && lang === 'ar' ? '1px solid var(--border)' : undefined }}
+                  >
+                    <p className="text-lg font-bold" style={{ color: s.color }}>{s.value}</p>
+                    <p className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>{s.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Offer */}
+              <div className="p-4 space-y-3">
+                <div className="flex items-start gap-3 p-3 rounded-xl" style={{ backgroundColor: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                  <Landmark size={16} color="#22c55e" className="flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold mb-0.5" style={{ color: '#22c55e' }}>
+                      {lang === 'ar'
+                        ? `بنك الإنماء مستعد يسلفك ${needsDecision.amount} ر.س`
+                        : `Inma Bank will advance ${needsDecision.amount} SAR for you`}
+                    </p>
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      {lang === 'ar'
+                        ? 'يُدفع الاشتراك الآن من البنك، ويُخصم المبلغ تلقائياً فور دخول أي مبلغ لحسابك — بدون فوائد.'
+                        : 'The bank pays the subscription now. The amount is auto-deducted as soon as funds arrive in your account — interest-free.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={acceptAdvance}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all active:scale-95"
+                    style={{ backgroundColor: '#22c55e' }}
+                  >
+                    <Landmark size={14} />
+                    {lang === 'ar' ? 'اقبل السلفة' : 'Accept Advance'}
+                  </button>
+                  <button
+                    onClick={regularPostpone}
+                    className="flex-1 py-3 rounded-xl text-sm font-semibold border transition-all active:scale-95"
+                    style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
+                  >
+                    {lang === 'ar' ? 'تأجيل عادي' : 'Regular Postpone'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Result: Continued (payment processed) */}
           {needsDecision.decision === 'continued' && (
             <div
@@ -298,6 +406,41 @@ export default function Home({ setActive }) {
                 <span className="text-xs" style={{ color: '#f59e0b' }}>
                   {lang === 'ar' ? 'سنذكرك بعد يومين بهذه العملية' : "We'll remind you in 2 days about this charge"}
                 </span>
+              </div>
+            </div>
+          )}
+
+          {/* Result: Bank Advanced */}
+          {needsDecision.decision === 'bank_advanced' && (
+            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid rgba(34,197,94,0.25)' }}>
+              <div className="flex items-center gap-3 p-4" style={{ borderBottom: '1px solid var(--border)' }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(34,197,94,0.12)' }}>
+                  <Landmark size={16} color="#22c55e" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold" style={{ color: '#22c55e' }}>
+                    {lang === 'ar' ? 'تمت السلفة البنكية' : 'Bank Advance Processed'}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+                    {needsDecision.name[lang]} · {needsDecision.amount} {lang === 'ar' ? 'ر.س' : 'SAR'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => dispatch({ type: 'CLEAR_DECISION', id: needsDecision.id })}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all active:scale-95"
+                  style={{ backgroundColor: 'rgba(34,197,94,0.1)', color: '#22c55e' }}
+                >
+                  <RotateCcw size={11} strokeWidth={2.5} />
+                  {tr('btnUndo')}
+                </button>
+              </div>
+              <div className="px-4 py-3 flex items-start gap-2" style={{ backgroundColor: 'rgba(34,197,94,0.05)' }}>
+                <Bell size={13} color="#22c55e" className="flex-shrink-0 mt-0.5" />
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                  {lang === 'ar'
+                    ? `سيُخصم مبلغ ${needsDecision.amount} ر.س تلقائياً من حسابك فور دخول أي مبلغ. بدون فوائد.`
+                    : `${needsDecision.amount} SAR will be auto-deducted from your account as soon as funds arrive. Interest-free.`}
+                </p>
               </div>
             </div>
           )}
