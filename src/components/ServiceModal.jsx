@@ -22,14 +22,14 @@ export default function ServiceModal({ service, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[200] flex items-end justify-center p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.82)' }}
       onClick={onClose}
     >
       {/* Modal — sticky header + scrollable body */}
       <div
         className="w-full max-w-lg flex flex-col rounded-2xl"
-        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '88vh' }}
+        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '82vh' }}
         onClick={e => e.stopPropagation()}
       >
         {/* ── Sticky header ── */}
