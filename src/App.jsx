@@ -8,6 +8,7 @@ import Home from './components/Home'
 import Payments from './components/Payments'
 import Card from './components/Card'
 import BankDashboard from './components/BankDashboard'
+import History from './components/History'
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState('home')
@@ -20,6 +21,7 @@ function AppContent() {
     payments: Payments,
     card: Card,
     bank: BankDashboard,
+    history: History,
   }
 
   const ActiveScreen = screens[activeTab]
@@ -56,6 +58,7 @@ function AppContent() {
           { id: 'payments', label: { ar: 'المدفوعات', en: 'Payments' }, icon: '≡' },
           { id: 'card', label: { ar: 'البطاقة', en: 'Card' }, icon: '▣' },
           { id: 'bank', label: { ar: 'البنك', en: 'Bank' }, icon: '◫' },
+          { id: 'history', label: { ar: 'التاريخ', en: 'History' }, icon: '◷' },
         ].map(tab => {
           const isActive = activeTab === tab.id
           return (
@@ -95,9 +98,14 @@ function TabIcon({ id, isActive }) {
       <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
     </svg>
   )
-  return (
+  if (id === 'bank') return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+    </svg>
+  )
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
     </svg>
   )
 }

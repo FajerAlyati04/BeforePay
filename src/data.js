@@ -171,6 +171,39 @@ export const bankMetrics = {
   ],
 }
 
+export const paymentHistory = [
+  {
+    month: { ar: 'يونيو 2026', en: 'June 2026' },
+    total: 412,
+    payments: [
+      { id: 'h1', name: { ar: 'أدوبي كلاود الإبداعية', en: 'Adobe Creative Cloud' }, category: { ar: 'تصميم', en: 'Design' }, date: '2026-06-30', amount: 249, status: 'paid', logo: 'A', color: '#FF0000' },
+      { id: 'h2', name: { ar: 'كانفا برو', en: 'Canva Pro' }, category: { ar: 'تصميم', en: 'Design' }, date: '2026-06-25', amount: 42, status: 'refunded', logo: 'C', color: '#00C4CC' },
+      { id: 'h3', name: { ar: 'سبوتيفاي العائلية', en: 'Spotify Family' }, category: { ar: 'موسيقى', en: 'Music' }, date: '2026-06-23', amount: 32, status: 'paid', logo: 'S', color: '#1DB954' },
+      { id: 'h4', name: { ar: 'نتفليكس بريميوم', en: 'Netflix Premium' }, category: { ar: 'ترفيه', en: 'Entertainment' }, date: '2026-06-19', amount: 56, status: 'paid', logo: 'N', color: '#E50914' },
+      { id: 'h5', name: { ar: 'شات جي بي تي بلاس', en: 'ChatGPT Plus' }, category: { ar: 'إنتاجية', en: 'Productivity' }, date: '2026-06-17', amount: 75, status: 'paid', logo: 'G', color: '#10A37F' },
+    ],
+  },
+  {
+    month: { ar: 'مايو 2026', en: 'May 2026' },
+    total: 205,
+    payments: [
+      { id: 'h6', name: { ar: 'نتفليكس بريميوم', en: 'Netflix Premium' }, category: { ar: 'ترفيه', en: 'Entertainment' }, date: '2026-05-19', amount: 56, status: 'paid', logo: 'N', color: '#E50914' },
+      { id: 'h7', name: { ar: 'سبوتيفاي العائلية', en: 'Spotify Family' }, category: { ar: 'موسيقى', en: 'Music' }, date: '2026-05-23', amount: 32, status: 'paid', logo: 'S', color: '#1DB954' },
+      { id: 'h8', name: { ar: 'شات جي بي تي بلاس', en: 'ChatGPT Plus' }, category: { ar: 'إنتاجية', en: 'Productivity' }, date: '2026-05-17', amount: 75, status: 'paid', logo: 'G', color: '#10A37F' },
+      { id: 'h9', name: { ar: 'كانفا برو', en: 'Canva Pro' }, category: { ar: 'تصميم', en: 'Design' }, date: '2026-05-25', amount: 42, status: 'pending', logo: 'C', color: '#00C4CC' },
+    ],
+  },
+  {
+    month: { ar: 'أبريل 2026', en: 'April 2026' },
+    total: 163,
+    payments: [
+      { id: 'h10', name: { ar: 'نتفليكس بريميوم', en: 'Netflix Premium' }, category: { ar: 'ترفيه', en: 'Entertainment' }, date: '2026-04-19', amount: 56, status: 'paid', logo: 'N', color: '#E50914' },
+      { id: 'h11', name: { ar: 'سبوتيفاي العائلية', en: 'Spotify Family' }, category: { ar: 'موسيقى', en: 'Music' }, date: '2026-04-23', amount: 32, status: 'paid', logo: 'S', color: '#1DB954' },
+      { id: 'h12', name: { ar: 'شات جي بي تي بلاس', en: 'ChatGPT Plus' }, category: { ar: 'إنتاجية', en: 'Productivity' }, date: '2026-04-17', amount: 75, status: 'failed', logo: 'G', color: '#10A37F' },
+    ],
+  },
+]
+
 function getRelativeDate(daysFromNow) {
   const d = new Date()
   d.setDate(d.getDate() + daysFromNow)

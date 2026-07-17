@@ -7,6 +7,7 @@ const t = {
   navPayments: { ar: 'المدفوعات', en: 'Payments' },
   navCard: { ar: 'البطاقة', en: 'Card' },
   navBank: { ar: 'لوحة البنك', en: 'Bank Panel' },
+  navHistory: { ar: 'التاريخ', en: 'History' },
 
   // Home
   recurringCard: { ar: 'بطاقة المدفوعات المتكررة', en: 'Recurring Payments Card' },
