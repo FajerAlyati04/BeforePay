@@ -1,6 +1,7 @@
-import { X, ExternalLink, Calendar, TrendingUp, AlertCircle, Clock } from 'lucide-react'
+import { X, ExternalLink, Calendar, TrendingUp, AlertCircle, Clock, CreditCard, XCircle } from 'lucide-react'
 import { useLang } from '../contexts/LanguageContext'
 import { useTranslation } from '../translations'
+import { useApp } from '../contexts/AppContext'
 
 function formatDate(dateStr, lang) {
   return new Date(dateStr).toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US', {
@@ -11,6 +12,7 @@ function formatDate(dateStr, lang) {
 export default function ServiceModal({ service, onClose }) {
   const { lang } = useLang()
   const tr = useTranslation(lang)
+  const { dispatch } = useApp()
 
   if (!service) return null
 
@@ -156,6 +158,35 @@ export default function ServiceModal({ service, onClose }) {
               {service.reasons[lang].map((r, i) => (
                 <p key={i} className="text-xs" style={{ color: 'var(--text-secondary)' }}>• {r}</p>
               ))}
+            </div>
+          )}
+
+          {/* Pay Now + Cancel Plan — for needs_decision services */}
+          {service.status === 'needs_decision' && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  dispatch({ type: 'PAY_SERVICE', amount: service.amount })
+                  dispatch({ type: 'SET_DECISION', id: service.id, decision: 'continued' })
+                  onClose()
+                }}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-all active:scale-95"
+                style={{ backgroundColor: 'var(--accent)' }}
+              >
+                <CreditCard size={14} />
+                {lang === 'ar' ? 'ادفع الآن' : 'Pay Now'}
+              </button>
+              <button
+                onClick={() => {
+                  dispatch({ type: 'SET_DECISION', id: service.id, decision: 'frozen' })
+                  onClose()
+                }}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
+                style={{ backgroundColor: 'transparent', border: '1.5px solid #ef4444', color: '#ef4444' }}
+              >
+                <XCircle size={14} />
+                {lang === 'ar' ? 'إلغاء الاشتراك' : 'Cancel Plan'}
+              </button>
             </div>
           )}
 
