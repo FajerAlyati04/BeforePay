@@ -33,7 +33,7 @@ export default function ServiceModal({ service, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-end justify-center px-4 pb-4 pt-24"
+      className="fixed inset-0 z-[200] flex items-end justify-center px-4 pb-4 pt-8"
       style={{ backgroundColor: 'rgba(0,0,0,0.82)' }}
       onClick={onClose}
     >
