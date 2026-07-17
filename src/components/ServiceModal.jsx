@@ -22,17 +22,21 @@ export default function ServiceModal({ service, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-6 sm:overflow-y-auto"
-      style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.82)' }}
       onClick={onClose}
     >
+      {/* Modal — sticky header + scrollable body */}
       <div
-        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl"
-        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '90vh', overflowY: 'auto' }}
+        className="w-full max-w-lg flex flex-col rounded-2xl"
+        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '88vh' }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center gap-3 p-5 pb-4" style={{ borderBottom: '1px solid var(--border)' }}>
+        {/* ── Sticky header ── */}
+        <div
+          className="flex-shrink-0 flex items-center gap-4 p-5"
+          style={{ borderBottom: '1px solid var(--border)' }}
+        >
           <div
             className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-white text-lg flex-shrink-0"
             style={{ backgroundColor: service.color }}
@@ -49,22 +53,27 @@ export default function ServiceModal({ service, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:opacity-70"
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-70 flex-shrink-0"
             style={{ backgroundColor: 'var(--bg)' }}
           >
             <X size={16} style={{ color: 'var(--text-secondary)' }} />
           </button>
         </div>
 
-        <div className="p-5 space-y-4">
-          {/* Price */}
-          <div className="flex items-center justify-between p-4 rounded-2xl" style={{ backgroundColor: 'var(--bg)' }}>
+        {/* ── Scrollable body ── */}
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+          {/* Price row */}
+          <div
+            className="flex items-center justify-between p-4 rounded-2xl"
+            style={{ backgroundColor: 'var(--bg)' }}
+          >
             <div>
               <p className="text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>
                 {lang === 'ar' ? 'المبلغ الشهري' : 'Monthly Amount'}
               </p>
               <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                {service.amount} <span className="text-sm font-normal">{tr('sar')}</span>
+                {service.amount}{' '}
+                <span className="text-sm font-normal">{tr('sar')}</span>
               </p>
               {service.oldAmount && (
                 <p className="text-xs mt-0.5 line-through" style={{ color: 'var(--text-secondary)' }}>
@@ -76,9 +85,11 @@ export default function ServiceModal({ service, onClose }) {
               className="text-xs font-semibold px-3 py-1.5 rounded-xl"
               style={{ backgroundColor: riskColor + '18', color: riskColor }}
             >
-              {service.riskLevel === 'high' ? (lang === 'ar' ? 'خطر عالٍ' : 'High Risk') :
-               service.riskLevel === 'medium' ? (lang === 'ar' ? 'خطر متوسط' : 'Med Risk') :
-               (lang === 'ar' ? 'خطر منخفض' : 'Low Risk')}
+              {service.riskLevel === 'high'
+                ? (lang === 'ar' ? 'خطر عالٍ' : 'High Risk')
+                : service.riskLevel === 'medium'
+                ? (lang === 'ar' ? 'خطر متوسط' : 'Med Risk')
+                : (lang === 'ar' ? 'خطر منخفض' : 'Low Risk')}
             </div>
           </div>
 
@@ -119,7 +130,10 @@ export default function ServiceModal({ service, onClose }) {
                   {item.icon}
                   <span className="text-[10px]">{item.label}</span>
                 </div>
-                <p className="text-xs font-semibold" style={{ color: item.highlight ? '#6366f1' : 'var(--text-primary)' }}>
+                <p
+                  className="text-xs font-semibold"
+                  style={{ color: item.highlight ? '#6366f1' : 'var(--text-primary)' }}
+                >
                   {item.value}
                 </p>
               </div>
@@ -135,7 +149,10 @@ export default function ServiceModal({ service, onClose }) {
               <div className="space-y-1.5">
                 {service.features[lang].map((f, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: service.color }} />
+                    <div
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: service.color }}
+                    />
                     <span className="text-sm" style={{ color: 'var(--text-primary)' }}>{f}</span>
                   </div>
                 ))}
@@ -143,7 +160,7 @@ export default function ServiceModal({ service, onClose }) {
             </div>
           )}
 
-          {/* Price increase warning */}
+          {/* AI Alert */}
           {service.priceChanged && service.reasons && (
             <div
               className="rounded-xl p-3 space-y-1.5"
@@ -161,7 +178,7 @@ export default function ServiceModal({ service, onClose }) {
             </div>
           )}
 
-          {/* Pay Now + Cancel Plan — for needs_decision services */}
+          {/* Pay Now + Cancel — needs_decision only */}
           {service.status === 'needs_decision' && (
             <div className="flex gap-2">
               <button
@@ -182,7 +199,7 @@ export default function ServiceModal({ service, onClose }) {
                   onClose()
                 }}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
-                style={{ backgroundColor: 'transparent', border: '1.5px solid #ef4444', color: '#ef4444' }}
+                style={{ border: '1.5px solid #ef4444', color: '#ef4444' }}
               >
                 <XCircle size={14} />
                 {lang === 'ar' ? 'إلغاء الاشتراك' : 'Cancel Plan'}
@@ -190,7 +207,7 @@ export default function ServiceModal({ service, onClose }) {
             </div>
           )}
 
-          {/* Website link */}
+          {/* Visit Website */}
           {service.website && (
             <a
               href={service.website}
