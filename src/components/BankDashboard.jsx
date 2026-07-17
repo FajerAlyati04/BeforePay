@@ -306,13 +306,13 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-end justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-6"
       style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
       onClick={onClose}
     >
       <div
         className="w-full max-w-md rounded-2xl"
-        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '85vh', overflowY: 'auto' }}
+        style={{ backgroundColor: 'var(--bg-card)', maxHeight: '86vh', overflowY: 'auto' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Drag handle */}
