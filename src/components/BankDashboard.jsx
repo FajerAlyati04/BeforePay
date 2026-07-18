@@ -143,8 +143,8 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
       ),
     },
     unused: {
-      title: lang === 'ar' ? 'الخدمات غير المستخدمة' : 'Unused Services',
-      subtitle: lang === 'ar' ? 'لم تُستخدم منذ 30 يوم+' : 'Unused for 30+ days',
+      title: lang === 'ar' ? 'اشتراكات بدون تفاعل' : 'Inactive Subscriptions',
+      subtitle: lang === 'ar' ? 'لم يُتَّخذ قرار عليها منذ فترة' : 'No decision made for a while',
       iconColor: '#8b5cf6',
       iconBg: 'rgba(139,92,246,0.12)',
       Icon: Archive,
@@ -152,6 +152,7 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
         <div className="space-y-3">
           {unusedServices.map(s => (
             <div key={s.id} className="rounded-2xl p-4" style={{ backgroundColor: 'var(--bg)' }}>
+              {/* Header row */}
               <div className="flex items-center gap-3 mb-3">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"
@@ -159,52 +160,58 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
                 >
                   {s.logo}
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                     {s.name[lang]}
                   </p>
                   <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{s.category[lang]}</p>
                 </div>
-                <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                <span className="text-sm font-bold flex-shrink-0" style={{ color: 'var(--text-primary)' }}>
                   {s.amount} {tr('sar')}
                 </span>
               </div>
+
+              {/* Stat boxes */}
               <div className="grid grid-cols-2 gap-2 mb-3">
-                <div className="rounded-xl p-2.5" style={{ backgroundColor: 'var(--bg-card)' }}>
+                <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--bg-card)' }}>
                   <p className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>
-                    {lang === 'ar' ? 'آخر استخدام' : 'Last Used'}
+                    {lang === 'ar' ? 'آخر فتح للتفاصيل' : 'Last Opened'}
                   </p>
-                  <p className="text-xs font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
+                  <p className="text-sm font-bold mt-1" style={{ color: 'var(--text-primary)' }}>
                     {lang === 'ar' ? `منذ ${s.unusedDays} يوم` : `${s.unusedDays} days ago`}
                   </p>
                 </div>
-                <div className="rounded-xl p-2.5" style={{ backgroundColor: 'var(--bg-card)' }}>
+                <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--bg-card)' }}>
                   <p className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>
-                    {lang === 'ar' ? 'عند الإلغاء' : 'If Cancelled'}
+                    {lang === 'ar' ? 'آخر قرار متخذ' : 'Last Decision'}
                   </p>
-                  <p className="text-xs font-semibold mt-1" style={{ color: '#22c55e' }}>
-                    +{s.amount} {tr('sar')}
+                  <p className="text-sm font-bold mt-1" style={{ color: 'var(--text-primary)' }}>
+                    {lang === 'ar' ? 'قبل تجديدين' : '2 renewals ago'}
                   </p>
                 </div>
               </div>
+
+              {/* Savings banner */}
               <div
                 className="flex items-center gap-2 py-2.5 px-3 rounded-xl"
-                style={{ backgroundColor: 'rgba(34,197,94,0.1)' }}
+                style={{ backgroundColor: 'rgba(34,197,94,0.12)' }}
               >
-                <div
-                  className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: '#22c55e' }}
-                >
-                  <span style={{ color: 'white', fontSize: 9, fontWeight: 700 }}>✓</span>
-                </div>
+                <span style={{ color: '#22c55e', fontWeight: 700, fontSize: 13 }}>✓</span>
                 <p className="text-xs font-semibold" style={{ color: '#22c55e' }}>
                   {lang === 'ar'
-                    ? `الإلغاء يوفر لك ${s.amount} ريال/شهرياً`
+                    ? `الإلغاء يوفر لك ${s.amount} ر.س شهرياً`
                     : `Cancelling saves you ${s.amount} SAR/month`}
                 </p>
               </div>
             </div>
           ))}
+
+          {/* Explanation footer */}
+          <p className="text-xs leading-relaxed text-center pt-1 pb-2" style={{ color: 'var(--text-secondary)' }}>
+            {lang === 'ar'
+              ? "نعتبر الاشتراك «بدون تفاعل» إذا مرّ عليه تجديدان متتاليان بدون أن تتخذ قراراً (متابعة أو تجميد)، أو لم تفتح تفاصيله من داخل التطبيق منذ فترة طويلة."
+              : "A subscription is considered \"inactive\" if two consecutive renewals passed without a decision (keep or freeze), or its details haven't been opened in a long time."}
+          </p>
         </div>
       ),
     },
@@ -215,84 +222,85 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
       iconBg: 'rgba(245,158,11,0.12)',
       Icon: Activity,
       body: (() => {
-        const r = 38
-        const circ = 2 * Math.PI * r
-        const filled = circ * (bankMetrics.riskScore / 100)
+        function riskReason(s) {
+          if (s.riskLevel === 'high' && s.priceChanged) {
+            const pct = Math.round(((s.amount - (s.oldAmount || 0)) / (s.oldAmount || 1)) * 100)
+            return lang === 'ar'
+              ? `زيادة سعر ${pct}% خلال آخر تجديد`
+              : `Price increased ${pct}% at last renewal`
+          }
+          if (s.riskLevel === 'medium' && s.unusedDays > 0) {
+            return lang === 'ar'
+              ? `لم تُفتح تفاصيله منذ ${s.unusedDays} يوم`
+              : `Details not opened for ${s.unusedDays} days`
+          }
+          if (s.riskLevel === 'medium' && s.trialEnding) {
+            return lang === 'ar'
+              ? 'الفترة التجريبية تنتهي قريباً'
+              : 'Free trial ending soon'
+          }
+          if (s.riskLevel === 'medium') {
+            return lang === 'ar'
+              ? 'لم يُتخذ قرار منذ تجديدين متتاليين'
+              : 'No decision made for 2 consecutive renewals'
+          }
+          return lang === 'ar'
+            ? 'سعر مستقر وتفاعل منتظم'
+            : 'Stable price and regular interaction'
+        }
+
         const groups = [
-          { level: 'high', label: lang === 'ar' ? 'مرتفع المخاطرة' : 'High Risk', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', list: highRisk },
-          { level: 'medium', label: lang === 'ar' ? 'متوسط المخاطرة' : 'Medium Risk', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', list: medRisk },
-          { level: 'low', label: lang === 'ar' ? 'منخفض المخاطرة' : 'Low Risk', color: '#22c55e', bg: 'rgba(34,197,94,0.08)', list: lowRisk },
+          { level: 'high',   label: lang === 'ar' ? 'مرتفع المخاطرة'  : 'High Risk',   color: '#ef4444', list: highRisk },
+          { level: 'medium', label: lang === 'ar' ? 'متوسط المخاطرة'  : 'Medium Risk', color: '#f59e0b', list: medRisk  },
+          { level: 'low',    label: lang === 'ar' ? 'منخفض المخاطرة'  : 'Low Risk',    color: '#22c55e', list: lowRisk  },
         ].filter(g => g.list.length > 0)
 
         return (
-          <div className="space-y-4">
-            {/* Gauge */}
-            <div className="flex flex-col items-center py-2">
-              <div className="relative w-32 h-32">
-                <svg viewBox="0 0 100 100" className="w-full h-full" style={{ transform: 'rotate(-90deg)' }}>
-                  <circle cx="50" cy="50" r={r} fill="none" strokeWidth="10" stroke="var(--border)" />
-                  <circle
-                    cx="50" cy="50" r={r} fill="none" strokeWidth="10"
-                    stroke="#f59e0b"
-                    strokeDasharray={`${filled} ${circ}`}
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                    {bankMetrics.riskScore}
-                  </span>
-                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>/100</span>
-                </div>
-              </div>
-              {/* Counts row */}
-              <div className="flex items-center gap-5 mt-3">
-                {[
-                  { label: lang === 'ar' ? 'مرتفع' : 'High Risk', count: highRisk.length, color: '#ef4444' },
-                  { label: lang === 'ar' ? 'متوسط' : 'Medium Risk', count: medRisk.length, color: '#f59e0b' },
-                  { label: lang === 'ar' ? 'منخفض' : 'Low Risk', count: lowRisk.length, color: '#22c55e' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
-                    <span className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>{item.count}</span>
-                  </div>
-                ))}
-              </div>
+          <div className="space-y-1">
+            {/* Score — plain number */}
+            <div className="text-center py-4">
+              <span className="text-6xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                {bankMetrics.riskScore}
+              </span>
+              <span className="text-xl ms-1" style={{ color: 'var(--text-secondary)' }}>/100</span>
             </div>
 
-            {/* Services grouped by risk level */}
+            {/* Groups */}
             {groups.map(group => (
-              <div key={group.level}>
-                <div className="flex items-center gap-1.5 mb-2">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: group.color }} />
-                  <p className="text-xs font-semibold" style={{ color: group.color }}>{group.label}</p>
-                </div>
-                <div className="space-y-2">
-                  {group.list.map(s => (
+              <div key={group.level} className="space-y-1.5">
+                {/* Section label */}
+                <p
+                  className="text-xs font-bold pt-3 pb-1"
+                  style={{ color: group.color }}
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                >
+                  {group.label}
+                </p>
+                {group.list.map(s => (
+                  <div
+                    key={s.id}
+                    className="flex items-center gap-3 p-4 rounded-2xl"
+                    style={{ backgroundColor: 'var(--bg)' }}
+                  >
                     <div
-                      key={s.id}
-                      className="flex items-center gap-3 p-3 rounded-xl"
-                      style={{ backgroundColor: group.bg }}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"
+                      style={{ backgroundColor: s.color }}
                     >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white text-xs flex-shrink-0"
-                        style={{ backgroundColor: s.color }}
-                      >
-                        {s.logo}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                          {s.name[lang]}
-                        </p>
-                        <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{s.category[lang]}</p>
-                      </div>
-                      <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                        {s.amount} {tr('sar')}
-                      </span>
+                      {s.logo}
                     </div>
-                  ))}
-                </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                        {s.name[lang]}
+                      </p>
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+                        {riskReason(s)}
+                      </p>
+                    </div>
+                    <span className="text-sm font-bold flex-shrink-0" style={{ color: 'var(--text-primary)' }}>
+                      {s.amount} {tr('sar')}
+                    </span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
