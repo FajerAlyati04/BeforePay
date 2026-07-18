@@ -18,7 +18,7 @@ const t = {
   tomorrow: { ar: 'غداً', en: 'Tomorrow' },
   daysLeft: { ar: 'أيام متبقية', en: 'days left' },
   btnContinue: { ar: 'استمرار', en: 'Continue' },
-  btnPostpone: { ar: 'تأجيل', en: 'Postpone' },
+  btnPostpone: { ar: 'تأجيل إشعار الدفع', en: 'Postpone Reminder' },
   btnFreeze: { ar: 'تجميد', en: 'Freeze' },
   upcomingPayments: { ar: 'أقرب المدفوعات', en: 'Upcoming Payments' },
   viewAll: { ar: 'عرض الكل', en: 'View All' },

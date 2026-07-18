@@ -201,7 +201,7 @@ export default function Home({ setActive }) {
                   className="py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95"
                   style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: '#f59e0b' }}
                 >
-                  <Clock size={13} strokeWidth={2.5} />
+                  <Bell size={13} strokeWidth={2.5} />
                   {tr('btnPostpone')}
                 </button>
                 <button
@@ -386,7 +386,9 @@ export default function Home({ setActive }) {
                 <div className="flex items-center gap-2">
                   <Clock size={15} color="#f59e0b" />
                   <span className="text-sm font-semibold" style={{ color: '#f59e0b' }}>
-                    {lang === 'ar' ? 'مؤجل' : 'Postponed'} · {needsDecision.name[lang]}
+                    {lang === 'ar'
+                      ? `مؤجل تذكيره: ${needsDecision.name.ar}`
+                      : `Reminder postponed: ${needsDecision.name.en}`}
                   </span>
                 </div>
                 <button
@@ -399,12 +401,14 @@ export default function Home({ setActive }) {
                 </button>
               </div>
               <div
-                className="flex items-center gap-2 px-3 py-2 rounded-xl"
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl"
                 style={{ backgroundColor: 'rgba(245,158,11,0.08)' }}
               >
                 <Bell size={12} color="#f59e0b" className="flex-shrink-0" />
                 <span className="text-xs" style={{ color: '#f59e0b' }}>
-                  {lang === 'ar' ? 'سنذكرك بعد يومين بهذه العملية' : "We'll remind you in 2 days about this charge"}
+                  {lang === 'ar'
+                    ? 'سنُذكّرك مرة أخرى بعد يومين — السحب الفعلي لن يتغير'
+                    : "We'll remind you again in 2 days — the actual charge won't change"}
                 </span>
               </div>
             </div>
