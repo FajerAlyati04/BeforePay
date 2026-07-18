@@ -61,7 +61,7 @@ const t = {
   bankTitle: { ar: 'لوحة تحكم البنك', en: 'Bank Dashboard' },
   savingsPotential: { ar: 'إمكانية التوفير', en: 'Savings Potential' },
   priceChangedServices: { ar: 'خدمات تغير سعرها', en: 'Price-Changed Services' },
-  unusedServices: { ar: 'خدمات غير مستخدمة', en: 'Unused Services' },
+  unusedServices: { ar: 'اشتراكات بدون تفاعل', en: 'Inactive Subscriptions' },
   riskScore: { ar: 'درجة الخطورة', en: 'Risk Score' },
   mostChangedMerchants: { ar: 'أكثر التجار تغييرًا للأسعار', en: 'Most Price-Changing Merchants' },
   riskDistribution: { ar: 'توزيع درجة الخطورة', en: 'Risk Distribution' },

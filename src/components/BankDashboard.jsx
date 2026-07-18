@@ -435,7 +435,7 @@ export default function BankDashboard() {
           iconBg="rgba(34,197,94,0.12)"
           title={tr('savingsPotential')}
           value={`${Math.max(savingsPotential, bankMetrics.totalSavingsPotential)} ${tr('sar')}`}
-          sub={lang === 'ar' ? 'إذا راجعت الخدمات غير المستخدمة' : 'If you review unused services'}
+          sub={lang === 'ar' ? 'إذا راجعت هذه الاشتراكات' : 'If you review these subscriptions'}
           onClick={() => setActiveSheet('savings')}
         />
         <MetricCard
@@ -443,8 +443,8 @@ export default function BankDashboard() {
           iconColor="#ef4444"
           iconBg="rgba(239,68,68,0.12)"
           title={tr('priceChangedServices')}
-          value={`${priceChangedCount} ${lang === 'ar' ? 'خدمة' : 'services'}`}
-          sub={lang === 'ar' ? 'رفعت أسعارها هذا الشهر' : 'Raised prices this month'}
+          value={lang === 'ar' ? `${priceChangedCount} خدمة` : `${priceChangedCount} service${priceChangedCount !== 1 ? 's' : ''}`}
+          sub={lang === 'ar' ? 'رُفعت أسعارها هذا الشهر' : 'Raised prices this month'}
           onClick={() => setActiveSheet('price')}
         />
         <MetricCard
@@ -452,8 +452,8 @@ export default function BankDashboard() {
           iconColor="#8b5cf6"
           iconBg="rgba(139,92,246,0.12)"
           title={tr('unusedServices')}
-          value={`${unusedCount} ${lang === 'ar' ? 'خدمة' : 'services'}`}
-          sub={lang === 'ar' ? 'لم تُستخدم منذ 30 يوم+' : 'Unused for 30+ days'}
+          value={lang === 'ar' ? `${unusedCount} خدمة` : `${unusedCount} service${unusedCount !== 1 ? 's' : ''}`}
+          sub={lang === 'ar' ? 'بدون قرار منذ تجديدين+' : 'No decision for 2+ renewals'}
           onClick={() => setActiveSheet('unused')}
         />
         <MetricCard
