@@ -15,46 +15,62 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
   const medRisk = services.filter(s => s.riskLevel === 'medium')
   const lowRisk = services.filter(s => s.riskLevel === 'low')
 
+  const trialEndingServices = services.filter(s => s.trialEnding)
+
   const savingsItems = [
     ...priceChangedServices.map(s => ({
       service: s,
       reason: lang === 'ar'
         ? `زيادة سعر ${Math.round(((s.amount - (s.oldAmount || 0)) / (s.oldAmount || 1)) * 100)}%`
-        : `Price up ${Math.round(((s.amount - (s.oldAmount || 0)) / (s.oldAmount || 1)) * 100)}%`,
+        : `Price increased ${Math.round(((s.amount - (s.oldAmount || 0)) / (s.oldAmount || 1)) * 100)}%`,
       saving: s.amount - (s.oldAmount || 0),
     })),
-    ...unusedServices.map(s => ({
-      service: s,
-      reason: lang === 'ar' ? `غير مستخدمة ${s.unusedDays} يوم` : `Unused ${s.unusedDays} days`,
-      saving: s.amount,
-    })),
+    ...trialEndingServices
+      .filter(s => !s.priceChanged)
+      .map(s => ({
+        service: s,
+        reason: lang === 'ar' ? 'الفترة التجريبية تنتهي قريباً' : 'Free trial ending soon',
+        saving: s.amount,
+      })),
+    ...unusedServices
+      .filter(s => !s.priceChanged && !s.trialEnding)
+      .map(s => ({
+        service: s,
+        reason: lang === 'ar' ? `بدون تفاعل ${s.unusedDays} يوم` : `No interaction for ${s.unusedDays} days`,
+        saving: s.amount,
+      })),
   ]
 
   const SHEETS = {
     savings: {
       title: lang === 'ar' ? 'إمكانية التوفير' : 'Savings Potential',
-      subtitle: lang === 'ar' ? 'إذا راجعت الخدمات غير المستخدمة' : 'If you review unused services',
+      subtitle: lang === 'ar' ? 'إذا راجعت هذه الاشتراكات' : 'If you review these subscriptions',
       iconColor: '#22c55e',
       iconBg: 'rgba(34,197,94,0.12)',
       Icon: TrendingUp,
       body: (
         <div className="space-y-2">
+          {/* Total savings box */}
           <div
-            className="rounded-2xl p-4 flex items-center justify-between"
+            className="rounded-2xl p-4 flex items-center justify-between mb-2"
             style={{ backgroundColor: 'var(--bg)' }}
           >
             <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
               {lang === 'ar' ? 'إجمالي التوفير المحتمل' : 'Potential Monthly Savings'}
             </span>
-            <span className="text-xl font-bold" style={{ color: '#22c55e' }}>
-              {bankMetrics.totalSavingsPotential} {tr('sar')}
+            <span className="text-2xl font-bold" style={{ color: '#22c55e' }}>
+              {savingsItems.reduce((sum, i) => sum + i.saving, 0)} {tr('sar')}
             </span>
           </div>
-          {savingsItems.map(({ service, reason, saving }) => (
+
+          {/* Services list */}
+          {savingsItems.map(({ service, reason, saving }, idx) => (
             <div
               key={service.id}
-              className="flex items-center gap-3 py-3"
-              style={{ borderBottom: '1px solid var(--border)' }}
+              className="flex items-center gap-3 py-3 px-1"
+              style={{
+                borderBottom: idx < savingsItems.length - 1 ? '1px solid var(--border)' : 'none',
+              }}
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"
@@ -68,7 +84,7 @@ function KpiSheet({ type, services, onClose, lang, tr }) {
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>{reason}</p>
               </div>
-              <span className="text-sm font-bold" style={{ color: '#ef4444' }}>
+              <span className="text-sm font-bold flex-shrink-0" style={{ color: '#ef4444' }}>
                 -{saving} {tr('sar')}
               </span>
             </div>
