@@ -13,11 +13,11 @@ import ConsentScreen from './components/ConsentScreen'
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState('home')
-  const [consented, setConsented] = useState(() => !!localStorage.getItem('bp_consent'))
+  const [consented, setConsented] = useState(() => !!localStorage.getItem('bp_consent_v2'))
   const { lang, dir } = useLang()
 
   function handleAccept() {
-    localStorage.setItem('bp_consent', '1')
+    localStorage.setItem('bp_consent_v2', '1')
     setConsented(true)
   }
 
